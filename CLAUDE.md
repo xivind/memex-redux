@@ -42,7 +42,7 @@ memex-redux/
 ├── config.json             # DB credentials and API endpoint URLs
 ├── tools_config.yaml       # YAML-defined simple single-table tools
 ├── Dockerfile
-├── docker-compose.yml
+├── create-container.sh
 ├── requirements.txt
 └── uvicorn_log_config.ini
 ```
