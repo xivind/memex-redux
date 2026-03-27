@@ -1,0 +1,9 @@
+{
+  "mariadb_host": "home-assistant",
+  "mariadb_database": "MASTERDB",
+  "mariadb_user": "mcp_readonly",
+  "mariadb_password": "",
+  "mariadb_port": 3306,
+  "velo_supervisor_url": "http://velo-supervisor:8003",
+  "server_port": 8002
+}

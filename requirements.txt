@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+mcp
+peewee
+PyMySQL
+requests
+pydantic
+pyyaml
+jinja2
