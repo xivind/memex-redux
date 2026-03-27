@@ -30,7 +30,7 @@ memex-redux/
 │   ├── finance.py
 │   ├── health.py
 │   ├── climate.py
-│   └── bikes.py
+│   └── vs2000.py
 │
 ├── models.py               # All Peewee model definitions
 ├── templates/
