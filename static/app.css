@@ -1,1 +1,10 @@
-/* static/app.css — All frontend CSS */
+/* static/app.css — Minimal overrides on Bootstrap 5 */
+code {
+  font-size: 0.85em;
+}
+
+#tools-table th,
+#activity-table th {
+  font-weight: 600;
+  background-color: #f8f9fa;
+}
