@@ -7,3 +7,5 @@ requests
 pydantic
 pyyaml
 jinja2
+pytest
+httpx
