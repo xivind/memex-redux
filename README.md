@@ -137,11 +137,19 @@ A status page is available at `http://localhost:8002/` showing registered tools 
 
 ## Connecting Claude Code
 
+**User scope** — available across all your Claude Code projects:
+
 ```bash
 claude mcp add --transport http --scope user memex-redux http://<host>:8002/mcp
 ```
 
-`--scope user` makes the server available across all your Claude Code projects. After that, Claude will automatically use your tools when relevant.
+**Project scope** — available only in the current project:
+
+```bash
+claude mcp add --transport http --scope project memex-redux http://<host>:8002/mcp
+```
+
+Replace `<host>` with the hostname or IP of the machine running the server.
 
 ---
 
