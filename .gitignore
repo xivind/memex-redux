@@ -144,6 +144,7 @@ ENV/
 env.bak/
 venv.bak/
 config.json
+models.py
 
 # Spyder project settings
 .spyderproject

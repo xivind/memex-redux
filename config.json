@@ -1,9 +1,0 @@
-{
-  "mariadb_host": "sandbox",
-  "mariadb_database": "MASTERDB",
-  "mariadb_user": "memex-redux",
-  "mariadb_password": "memex",
-  "mariadb_port": 3306,
-  "velo_supervisor_url": "http://velo-supervisor:8003",
-  "server_port": 8002
-}
