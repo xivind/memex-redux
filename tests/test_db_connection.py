@@ -11,7 +11,7 @@ def _make_config(**overrides):
         "mariadb_user": "user",
         "mariadb_password": "pass",
         "mariadb_port": 3306,
-        "velo_supervisor_url": "http://vs:8003",
+        "api_domains": {},
         "server_port": 8002,
     }
     base.update(overrides)
@@ -41,3 +41,26 @@ def test_check_db_connection_returns_false_on_error():
     import core.db_connection as db_mod
     db_mod.db.connect = MagicMock(side_effect=Exception("no db"))
     assert db_mod.check_db_connection() is False
+
+
+def test_config_loads_api_domains():
+    cfg_json = json.dumps({
+        "mariadb_host": "testhost",
+        "mariadb_database": "testdb",
+        "mariadb_user": "user",
+        "mariadb_password": "pass",
+        "mariadb_port": 3306,
+        "api_domains": {
+            "Velo Supervisor 2000": "http://vs:8003",
+            "Yr": "http://yr:8004",
+        },
+        "server_port": 8002,
+    })
+    with patch("builtins.open", mock_open(read_data=cfg_json)):
+        from importlib import reload
+        import core.db_connection as db_mod
+        reload(db_mod)
+        assert db_mod.config.api_domains == {
+            "Velo Supervisor 2000": "http://vs:8003",
+            "Yr": "http://yr:8004",
+        }
