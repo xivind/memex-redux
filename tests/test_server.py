@@ -42,7 +42,7 @@ def test_api_status_db_connected_true(client):
 def test_api_status_db_connected_false():
     with patch("core.db_connection.check_db_connection", return_value=False):
         from fastapi.testclient import TestClient
-        import importlib, sys
+        import sys
         for key in list(sys.modules.keys()):
             if "server" in key and "core" in key:
                 del sys.modules[key]
