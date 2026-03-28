@@ -81,7 +81,7 @@ FastAPI app  (port 8002)
 The MCP app is mounted onto the FastAPI app:
 
 ```python
-mcp = FastMCP("homelab-mcp", stateless_http=True)
+mcp = FastMCP("memex-mcp", stateless_http=True)
 app = FastAPI(lifespan=lambda a: mcp.session_manager.run())
 app.mount("/mcp", mcp.streamable_http_app())
 ```
@@ -211,7 +211,7 @@ HEALTHCHECK --interval=10m --timeout=10s \
 ## Connecting Claude Code
 
 ```bash
-claude mcp add --transport http --scope user homelab http://<host>:8002/mcp
+claude mcp add --transport http --scope user memex-redux http://<host>:8002/mcp
 ```
 
 `--scope user` makes the server available across all Claude Code projects.

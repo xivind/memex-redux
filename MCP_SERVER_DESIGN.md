@@ -23,7 +23,7 @@ The server runs as a Docker container alongside other home automation services a
 Claude Code connects with a single command:
 
 ```bash
-claude mcp add --transport http --scope user homelab http://<your-host>:8002/mcp
+claude mcp add --transport http --scope user memex-redux http://<your-host>:8002/mcp
 ```
 
 The `--scope user` flag makes the server available across all Claude Code projects, not just the current one. Replace `<your-host>` with the hostname or IP of the machine running the container.
@@ -45,7 +45,7 @@ It includes `mcp.server.fastmcp.FastMCP`, which integrates directly with FastAPI
 ```python
 from mcp.server.fastmcp import FastMCP
 
-mcp = FastMCP("homelab-mcp", stateless_http=True)
+mcp = FastMCP("memex-redux-mcp", stateless_http=True)
 
 @mcp.tool(description="Recent transactions from your bank account")
 def get_transactions(days: int = 30) -> list[dict]:
@@ -347,14 +347,14 @@ HEALTHCHECK --interval=10m --timeout=10s \
 Register the server once per user:
 
 ```bash
-claude mcp add --transport http --scope user homelab http://<host>:8002/mcp
+claude mcp add --transport http --scope user memex-redux http://<host>:8002/mcp
 ```
 
 Verify the connection:
 
 ```bash
 claude mcp list
-claude mcp get homelab
+claude mcp get memex-redux
 ```
 
 From that point on, Claude Code can use all registered tools in any session without further configuration.
