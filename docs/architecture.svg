@@ -76,7 +76,7 @@
   <!-- Distribution bar + arrows to data sources -->
   <line x1="176" y1="302" x2="464" y2="302"
         stroke="#555" stroke-width="1.2"/>
-  <line x1="176" y1="302" x2="176" y2="408"
+  <line x1="176" y1="302" x2="176" y2="410"
         stroke="#555" stroke-width="1.2" marker-end="url(#arrow)"/>
   <line x1="464" y1="302" x2="464" y2="418"
         stroke="#555" stroke-width="1.2" marker-end="url(#arrow)"/>
