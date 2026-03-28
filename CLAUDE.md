@@ -169,7 +169,9 @@ What is logged:
   "mariadb_user": "mcp_readonly",
   "mariadb_password": "...",
   "mariadb_port": 3306,
-  "velo_supervisor_url": "http://velo-supervisor:8003",
+  "api_domains": {
+    "My API": "http://..."
+  },
   "server_port": 8002
 }
 ```
