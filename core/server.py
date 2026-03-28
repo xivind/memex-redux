@@ -42,19 +42,19 @@ async def health():
 
 @app.get("/api/status")
 def api_status():
-    velo_connected = None
-    if config.velo_supervisor_url:
+    domain_status = {}
+    for name, url in config.api_domains.items():
         try:
-            r = _requests.get(f"{config.velo_supervisor_url}/health", timeout=3)
-            velo_connected = r.ok
+            r = _requests.get(url, timeout=3)
+            domain_status[name] = r.ok
         except Exception:
-            velo_connected = False
+            domain_status[name] = False
 
     return {
         "uptime_seconds": int(time.monotonic() - _start_time),
         "start_time": _start_dt,
         "db_connected": check_db_connection(),
-        "velo_connected": velo_connected,
+        "api_domains": domain_status,
         "total_calls": call_log.total_count,
         "tools": _registered_tools,
         "recent_calls": call_log.get_all(),
