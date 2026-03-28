@@ -3,6 +3,9 @@
      width="640" height="520" viewBox="0 0 640 520"
      font-family="system-ui, -apple-system, sans-serif">
 
+  <title>memex-redux architecture diagram</title>
+  <desc>Top-down diagram showing Claude Code connecting via Streamable HTTP to the memex-redux server, which contains an MCP Endpoint, Tool Registry, and plugin cards that fan out to a SQL Database and External APIs.</desc>
+
   <defs>
     <marker id="arrow" markerWidth="8" markerHeight="8"
             refX="7" refY="3" orient="auto">
@@ -75,7 +78,7 @@
         stroke="#555" stroke-width="1.2"/>
   <line x1="176" y1="302" x2="176" y2="408"
         stroke="#555" stroke-width="1.2" marker-end="url(#arrow)"/>
-  <line x1="464" y1="302" x2="464" y2="406"
+  <line x1="464" y1="302" x2="464" y2="418"
         stroke="#555" stroke-width="1.2" marker-end="url(#arrow)"/>
 
   <!-- SQL Database -->
