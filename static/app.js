@@ -13,42 +13,72 @@ function fmtTime(iso) {
   return new Date(iso).toLocaleTimeString();
 }
 
+function statusBadge(connected, labelOk, labelErr) {
+  if (connected === true)  return `<span class="status-dot ok"></span>${labelOk}`;
+  if (connected === false) return `<span class="status-dot err"></span><span class="text-danger">${labelErr}</span>`;
+  return `<span class="status-dot na"></span><span class="text-muted">—</span>`;
+}
+
 function renderStatus(data) {
   document.getElementById("stat-start").textContent = new Date(data.start_time).toLocaleString();
   document.getElementById("stat-uptime").textContent = fmtUptime(data.uptime_seconds);
+  document.getElementById("stat-total").textContent = data.total_calls.toLocaleString();
+  document.getElementById("stat-db").innerHTML = statusBadge(data.db_connected, "Connected", "Disconnected");
 
-  const dbEl = document.getElementById("stat-db");
-  dbEl.innerHTML = data.db_connected
-    ? '<span class="badge bg-success">Connected</span>'
-    : '<span class="badge bg-danger">Disconnected</span>';
+  const veloLabel = document.getElementById("velo-label");
+  const veloVal   = document.getElementById("stat-velo");
+  if (data.velo_connected !== null && data.velo_connected !== undefined) {
+    veloLabel.style.display = "";
+    veloVal.style.display   = "";
+    veloVal.innerHTML = statusBadge(data.velo_connected, "Connected", "Disconnected");
+  }
 }
 
-function renderTools(tools) {
+function renderTools(tools, callCounts) {
   document.getElementById("tool-count").textContent = tools.length;
   const tbody = document.getElementById("tools-body");
-  tbody.innerHTML = tools.map(t => `
-    <tr>
-      <td><code>${t.name}</code></td>
+  tbody.innerHTML = tools.map(t => {
+    const count = callCounts[t.name] || 0;
+    const countBadge = count > 0
+      ? `<span class="badge bg-secondary rounded-pill">${count}</span>`
+      : `<span class="text-muted">—</span>`;
+    return `<tr>
+      <td class="ps-3"><code>${t.name}</code></td>
       <td class="text-muted">${t.description}</td>
-    </tr>`).join("");
+      <td class="text-end pe-3">${countBadge}</td>
+    </tr>`;
+  }).join("");
 }
 
 function renderActivity(calls) {
   const tbody = document.getElementById("activity-body");
+
   if (!calls.length) {
-    tbody.innerHTML = '<tr><td colspan="5" class="text-muted text-center py-3">No calls yet</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="5" class="text-muted text-center py-3 ps-3">No calls yet</td></tr>';
+    document.getElementById("error-count").style.display = "none";
     return;
   }
+
+  const errorCount = calls.filter(c => c.error).length;
+  const errBadge = document.getElementById("error-count");
+  if (errorCount > 0) {
+    errBadge.textContent = `${errorCount} error${errorCount > 1 ? "s" : ""}`;
+    errBadge.style.display = "";
+  } else {
+    errBadge.style.display = "none";
+  }
+
   tbody.innerHTML = [...calls].reverse().map(c => {
     const result = c.error
-      ? `<span class="text-danger">${c.error}</span>`
+      ? `<span class="text-danger small">${c.error}</span>`
       : `<span class="text-success">${c.row_count ?? "—"} rows</span>`;
-    return `<tr>
-      <td class="text-muted small">${fmtTime(c.timestamp)}</td>
+    const rowClass = c.error ? "table-error" : "";
+    return `<tr class="${rowClass}">
+      <td class="ps-3 text-muted small">${fmtTime(c.timestamp)}</td>
       <td><code>${c.tool_name}</code></td>
       <td class="text-muted small">${JSON.stringify(c.params)}</td>
       <td class="text-muted small">${c.duration_ms}ms</td>
-      <td>${result}</td>
+      <td class="pe-3">${result}</td>
     </tr>`;
   }).join("");
 }
@@ -59,9 +89,16 @@ async function refresh() {
     const res = await fetch("/api/status");
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
+
+    const callCounts = {};
+    data.recent_calls.forEach(c => {
+      callCounts[c.tool_name] = (callCounts[c.tool_name] || 0) + 1;
+    });
+
     renderStatus(data);
-    renderTools(data.tools);
+    renderTools(data.tools, callCounts);
     renderActivity(data.recent_calls);
+
     badge.className = "badge bg-success";
     badge.textContent = `Updated ${new Date().toLocaleTimeString()}`;
   } catch (err) {

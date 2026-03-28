@@ -12,7 +12,7 @@ class Config(BaseModel):
     mariadb_user: str
     mariadb_password: str
     mariadb_port: int = 3306
-    velo_supervisor_url: str
+    velo_supervisor_url: str = ""
     server_port: int = 8002
 
 

@@ -1,10 +1,116 @@
-/* static/app.css — Minimal overrides on Bootstrap 5 */
-code {
-  font-size: 0.85em;
+/* static/app.css — Status page styles */
+
+body {
+  background-color: #f4f6f9;
 }
 
-#tools-table th,
-#activity-table th {
+/* Page header */
+.page-header {
+  background: #fff;
+  border-bottom: 1px solid #e3e8ef;
+  padding: 1rem 0;
+  margin-bottom: 1.5rem;
+}
+
+.page-header h1 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: #1a1d23;
+}
+
+.page-header .subtitle {
+  font-size: 0.8rem;
+  color: #8a92a0;
+}
+
+/* Cards */
+.card {
+  border: 1px solid #e3e8ef;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  border-radius: 0.5rem;
+}
+
+.card-header {
+  background-color: #f8f9fb;
+  border-bottom: 1px solid #e3e8ef;
   font-weight: 600;
-  background-color: #f8f9fa;
+  font-size: 0.875rem;
+  color: #444c5c;
+  padding: 0.65rem 1rem;
+}
+
+/* Definition lists in status cards */
+.stat-grid {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.4rem 1.5rem;
+  align-items: center;
+}
+
+.stat-label {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #8a92a0;
+  white-space: nowrap;
+}
+
+.stat-value {
+  font-size: 0.875rem;
+  color: #1a1d23;
+}
+
+/* Status indicators */
+.status-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 5px;
+  vertical-align: middle;
+  position: relative;
+  top: -1px;
+}
+
+.status-dot.ok   { background-color: #198754; }
+.status-dot.err  { background-color: #dc3545; }
+.status-dot.na   { background-color: #ced4da; }
+
+/* Tables */
+.table th {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #8a92a0;
+  background-color: #f8f9fb;
+  border-bottom-width: 1px;
+}
+
+.table td {
+  font-size: 0.85rem;
+  vertical-align: middle;
+}
+
+code {
+  font-size: 0.82em;
+  color: #5a3e9b;
+  background: #f0ecf9;
+  padding: 0.1em 0.35em;
+  border-radius: 3px;
+}
+
+.table-error td {
+  background-color: #fff5f5 !important;
+}
+
+.table-error td code {
+  color: #dc3545;
+  background: #fce8e8;
+}
+
+/* Refresh badge */
+#refresh-badge {
+  font-size: 0.75rem;
+  font-weight: 500;
 }

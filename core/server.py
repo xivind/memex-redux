@@ -3,13 +3,14 @@ import time
 from contextlib import asynccontextmanager
 from datetime import datetime
 
+import requests as _requests
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
 from core.call_log import call_log
-from core.db_connection import check_db_connection
+from core.db_connection import check_db_connection, config
 from core.tool_registry import discover_tools, mcp, _registered_tools
 
 _start_time = time.monotonic()
@@ -40,11 +41,21 @@ async def health():
 
 
 @app.get("/api/status")
-async def api_status():
+def api_status():
+    velo_connected = None
+    if config.velo_supervisor_url:
+        try:
+            r = _requests.get(f"{config.velo_supervisor_url}/health", timeout=3)
+            velo_connected = r.ok
+        except Exception:
+            velo_connected = False
+
     return {
         "uptime_seconds": int(time.monotonic() - _start_time),
         "start_time": _start_dt,
         "db_connected": check_db_connection(),
+        "velo_connected": velo_connected,
+        "total_calls": call_log.total_count,
         "tools": _registered_tools,
         "recent_calls": call_log.get_all(),
     }
