@@ -26,7 +26,6 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 app.mount("/static", StaticFiles(directory="static"), name="static")
-app.mount("/mcp", mcp.streamable_http_app())
 
 
 @app.get("/", response_class=HTMLResponse)
@@ -48,3 +47,9 @@ async def api_status():
         "tools": _registered_tools,
         "recent_calls": call_log.get_all(),
     }
+
+
+# Must be last: streamable_http_app() exposes an internal /mcp route.
+# Mounting at / (after all other routes) lets /mcp reach it while keeping
+# /, /health, and /api/status handled by FastAPI above.
+app.mount("/", mcp.streamable_http_app())
