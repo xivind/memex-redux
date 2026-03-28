@@ -8,14 +8,13 @@ A generic, extensible MCP server for Claude Code. Connect your own databases and
 
 memex-redux runs a local HTTP server that exposes your personal data sources as [MCP tools](https://modelcontextprotocol.io). Claude Code connects to it and can then query your data directly in conversation — finance, health, climate, home automation, or anything else you want to hook up.
 
-```
-Claude Code  ──(Streamable HTTP)──▶  memex-redux (port 8002)
-                                          │
-                                    ┌─────┴─────┐
-                                 MariaDB     External APIs
-```
-
 Tools are Python plugins in `tools/`. Drop a file there, restart the server, and Claude can use it. No registration step required.
+
+---
+
+## Architecture
+
+![Architecture](docs/architecture.svg)
 
 ---
 
