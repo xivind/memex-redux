@@ -49,7 +49,6 @@ memex-redux/
 │
 ├── models.example.py       # Template — copy to models.py and adapt
 ├── config.example.json     # Template — copy to config.json and fill in
-├── tools_config.yaml       # YAML-defined simple single-table tools
 ├── templates/
 │   └── status.html         # Bootstrap 5 status UI
 ├── static/
@@ -119,18 +118,6 @@ def get_finance(days: int = 30) -> list[dict]:
 ```
 
 The `description` is what Claude reads to decide which tool to call — write it as a natural question.
-
-For simple single-table queries, you can skip Python entirely and use `tools_config.yaml`:
-
-```yaml
-tools:
-  - name: get_weather
-    description: "Current and recent outdoor weather"
-    type: database
-    table: yr_weather
-    fields: [record_time, temperature, wind_speed]
-    default_days: 7
-```
 
 ### 5. Run
 

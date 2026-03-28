@@ -40,7 +40,6 @@ memex-redux/
 │   └── app.css             # All frontend CSS
 │
 ├── config.json             # DB credentials and API endpoint URLs
-├── tools_config.yaml       # YAML-defined simple single-table tools
 ├── Dockerfile
 ├── create-container.sh
 ├── requirements.txt
@@ -120,20 +119,6 @@ def get_sleep(days: int = 14) -> list[dict]:
 @mcp.tool(description="Bike fleet status and maintenance schedule")
 def get_bikes() -> list[dict]:
     return http_connector.get("/api/bikes")
-```
-
-### YAML tools (no Python needed)
-
-Simple single-table tools can be declared in `tools_config.yaml` instead of Python:
-
-```yaml
-tools:
-  - name: get_weather
-    description: "Current and recent outdoor weather"
-    type: database
-    table: yr_weather
-    fields: [record_time, temperature, wind_speed, precipitation]
-    default_days: 7
 ```
 
 ### Tool design principle

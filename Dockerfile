@@ -11,7 +11,6 @@ COPY core/ core/
 COPY tools/ tools/
 COPY static/ static/
 COPY templates/ templates/
-COPY tools_config.yaml .
 COPY uvicorn_log_config.ini .
 COPY config.json .
 COPY models.py .
