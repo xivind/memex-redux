@@ -21,7 +21,8 @@ templates = Jinja2Templates(directory="templates")
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     discover_tools()
-    yield
+    async with mcp.session_manager.run():
+        yield
 
 
 app = FastAPI(lifespan=lifespan)
