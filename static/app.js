@@ -25,12 +25,18 @@ function renderStatus(data) {
   document.getElementById("stat-total").textContent = data.total_calls.toLocaleString();
   document.getElementById("stat-db").innerHTML = statusBadge(data.db_connected, "Connected", "Disconnected");
 
-  const veloLabel = document.getElementById("velo-label");
-  const veloVal   = document.getElementById("stat-velo");
-  if (data.velo_connected !== null && data.velo_connected !== undefined) {
-    veloLabel.style.display = "";
-    veloVal.style.display   = "";
-    veloVal.innerHTML = statusBadge(data.velo_connected, "Connected", "Disconnected");
+  const grid = document.getElementById("connections-grid");
+  document.querySelectorAll(".api-domain-row").forEach(el => el.remove());
+  for (const [name, connected] of Object.entries(data.api_domains)) {
+    const label = document.createElement("span");
+    label.className = "stat-label api-domain-row";
+    label.textContent = name;
+
+    const value = document.createElement("span");
+    value.className = "stat-value api-domain-row";
+    value.innerHTML = statusBadge(connected, "Connected", "Disconnected");
+
+    grid.append(label, value);
   }
 }
 
