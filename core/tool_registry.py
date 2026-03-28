@@ -6,10 +6,15 @@ from datetime import datetime
 from pathlib import Path
 
 from mcp.server.fastmcp import FastMCP
+from mcp.server.fastmcp.server import TransportSecuritySettings
 
 from core.call_log import call_log
 
-mcp = FastMCP("memex-mcp", stateless_http=True)
+mcp = FastMCP(
+    "memex-mcp",
+    stateless_http=True,
+    transport_security=TransportSecuritySettings(enable_dns_rebinding_protection=False),
+)
 
 _registered_tools: list[dict] = []
 
