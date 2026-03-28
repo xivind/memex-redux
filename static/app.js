@@ -26,7 +26,7 @@ function renderStatus(data) {
   document.getElementById("stat-db").innerHTML = statusBadge(data.db_connected, "Connected", "Disconnected");
 
   const grid = document.getElementById("connections-grid");
-  document.querySelectorAll(".api-domain-row").forEach(el => el.remove());
+  grid.querySelectorAll(".api-domain-row").forEach(el => el.remove());
   for (const [name, connected] of Object.entries(data.api_domains)) {
     const label = document.createElement("span");
     label.className = "stat-label api-domain-row";
