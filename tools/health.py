@@ -8,7 +8,8 @@ from models import Fitbit, PolarCardioLoad, PolarDailyActivity, PolarNightlyRech
 @mcp.tool(
     description=(
         "Sleep duration, quality scores, and nightly recovery metrics from Polar. "
-        "Combines polar_sleep_daily and polar_nightly_recharge by date."
+        "Combines polar_sleep_daily and polar_nightly_recharge by date. "
+        "Default is 14 days — increase for trend analysis or decrease for a quick recent check."
     )
 )
 def get_sleep(days: int = 14) -> list[dict]:
@@ -73,7 +74,8 @@ def get_sleep(days: int = 14) -> list[dict]:
 @mcp.tool(
     description=(
         "Training load, cardio stress, and daily activity data from Polar. "
-        "Combines polar_cardio_load and polar_daily_activity by date."
+        "Combines polar_cardio_load and polar_daily_activity by date. "
+        "Default is 14 days — increase for trend analysis or decrease for a quick recent check."
     )
 )
 def get_training(days: int = 14) -> list[dict]:
@@ -125,7 +127,8 @@ def get_training(days: int = 14) -> list[dict]:
 @mcp.tool(
     description=(
         "Strava workout activities including runs, rides, distance, elevation, "
-        "and heart rate. Large dataset — use a focused days range."
+        "and heart rate. Default is 90 days — adjust based on the question, "
+        "but prefer focused ranges as this is a large dataset."
     )
 )
 def get_strava(days: int = 90) -> list[dict]:
@@ -141,7 +144,8 @@ def get_strava(days: int = 90) -> list[dict]:
 @mcp.tool(
     description=(
         "Fitbit health metrics: steps, calories, sleep stages, heart rate zones, "
-        "HRV, SpO2, skin temperature, and weight."
+        "HRV, SpO2, skin temperature, and weight. "
+        "Default is 30 days — increase for longer trend analysis or decrease for recent data only."
     )
 )
 def get_fitbit(days: int = 30) -> list[dict]:

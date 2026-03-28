@@ -17,7 +17,7 @@ from models import (
 )
 
 
-@mcp.tool(description="Recent bank transactions and current account balance from ATM provider")
+@mcp.tool(description="Recent bank transactions and current account balance from ATM provider. Default is 30 days — increase to cover a longer period, e.g. 90 days for a quarterly review.")
 def get_transactions(days: int = 30) -> dict:
     since = date.today() - timedelta(days=days)
     latest = Balance.select().order_by(Balance.record_time.desc()).first()

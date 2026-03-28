@@ -8,7 +8,8 @@ from models import Nilu, Vindstyrka, Yr
 @mcp.tool(
     description=(
         "Outdoor weather conditions (Yr: temperature, humidity, wind) "
-        "and air quality measurements (NILU: PM10, PM2.5, NO2)."
+        "and air quality measurements (NILU: PM10, PM2.5, NO2). "
+        "Default is 7 days — increase for weekly/monthly comparisons."
     )
 )
 def get_outdoor_conditions(days: int = 7) -> dict:
@@ -28,7 +29,8 @@ def get_outdoor_conditions(days: int = 7) -> dict:
 @mcp.tool(
     description=(
         "Indoor temperature, humidity, and air quality from Vindstyrka sensors. "
-        "May include multiple sensors identified by sensor_name."
+        "May include multiple sensors identified by sensor_name. "
+        "Default is 7 days — increase for weekly/monthly comparisons."
     )
 )
 def get_indoor_climate(days: int = 7) -> list[dict]:
