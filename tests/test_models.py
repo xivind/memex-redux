@@ -1,6 +1,5 @@
 # tests/test_models.py
 import pytest
-from tests.conftest import _get_all_models
 from models import (
     Balance, Transaction,
     MoneybagCategory, MoneybagPayee, MoneybagBudgetEntry,
