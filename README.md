@@ -87,6 +87,9 @@ Edit `config.json` with your MariaDB connection details and any API endpoints yo
   "mariadb_user": "mcp_readonly",
   "mariadb_password": "your_password",
   "mariadb_port": 3306,
+  "api_domains": {
+    "My Service": "http://my-service:8003"
+  },
   "server_port": 8002
 }
 ```
@@ -154,13 +157,14 @@ Replace `<host>` with the hostname or IP of the machine running the server.
 
 ## HTTP-based tools
 
-For data sources behind an API rather than a database, subclass `HttpConnector`:
+For data sources behind an API rather than a database, use `HttpConnector` with a base URL from `config.api_domains`:
 
 ```python
+from core.db_connection import config
 from core.http_connector import HttpConnector
 from core.tool_registry import mcp
 
-connector = HttpConnector(base_url="http://my-service:8003")
+connector = HttpConnector(config.api_domains["My Service"])
 
 @mcp.tool(description="Bike fleet status and maintenance schedule")
 def get_bikes() -> list[dict]:
