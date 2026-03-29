@@ -10,6 +10,7 @@ from models import Fitbit, PolarCardioLoad, PolarDailyActivity, PolarNightlyRech
         "Sleep duration, quality scores, and nightly recovery metrics from Polar. "
         "Combines polar_sleep_daily and polar_nightly_recharge by date. "
         "Default is 14 days — increase for trend analysis or decrease for a quick recent check."
+	"For health data before 2025-06-10, use the Fitbit tool instead. The Polar tool only has health data from 2025-07-01 and forward. Always use the Fitbit tool for weight data."
     )
 )
 def get_sleep(days: int = 14) -> list[dict]:
@@ -76,6 +77,7 @@ def get_sleep(days: int = 14) -> list[dict]:
         "Training load, cardio stress, and daily activity data from Polar. "
         "Combines polar_cardio_load and polar_daily_activity by date. "
         "Default is 14 days — increase for trend analysis or decrease for a quick recent check."
+	"For health data before 2025-06-10, use the Fitbit tool instead. The Polar tool only has health data from 2025-07-01 and forward. Always use the Fitbit tool for weight data."
     )
 )
 def get_training(days: int = 14) -> list[dict]:
@@ -146,6 +148,7 @@ def get_strava(days: int = 90) -> list[dict]:
         "Fitbit health metrics: steps, calories, sleep stages, heart rate zones, "
         "HRV, SpO2, skin temperature, and weight. "
         "Default is 30 days — increase for longer trend analysis or decrease for recent data only."
+	"For dates after 2025-06-10 the Fitbit tool only contains info about weight. For health data after 2025-06-10, use the Polar tools instead, and only use Fitbit tools for weight."
     )
 )
 def get_fitbit(days: int = 30) -> list[dict]:
