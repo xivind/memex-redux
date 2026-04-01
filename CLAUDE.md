@@ -205,13 +205,13 @@ HEALTHCHECK --interval=10m --timeout=10s \
 
 ---
 
-## Connecting Claude Code
+## Connecting a client
 
 ```bash
 claude mcp add --transport http --scope user memex-redux http://<host>:8002/mcp
 ```
 
-`--scope user` makes the server available across all Claude Code projects.
+If using [vannevar](https://github.com/xivind/vannevar), the connection is configured there — no manual step needed here.
 
 ---
 

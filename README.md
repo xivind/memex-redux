@@ -165,21 +165,17 @@ A status page is available at `http://localhost:8002/` showing registered tools 
 
 ---
 
-## Connecting Claude Code
+## Connecting a client
 
-**User scope** — available across all your Claude Code projects:
+Once the server is running, connect a Claude Code client to it:
 
 ```bash
 claude mcp add --transport http --scope user memex-redux http://<host>:8002/mcp
 ```
 
-**Project scope** — available only in the current project:
+Replace `<host>` with the hostname or IP of the server (use `localhost` if running locally). `--scope user` makes it available across all your Claude Code projects.
 
-```bash
-claude mcp add --transport http --scope project memex-redux http://<host>:8002/mcp
-```
-
-Replace `<host>` with the hostname or IP of the machine running the server (use `localhost` if running locally).
+If you are using [vannevar](https://github.com/xivind/vannevar), the connection is configured there via `.mcp.json` — no manual `claude mcp add` needed.
 
 ---
 
