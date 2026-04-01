@@ -13,7 +13,7 @@ docker build -t memex-redux .
 # Create and run container
 docker run -d \
   --name=memex-redux \
-  -e TZ=Europe/Oslo \
+  -e TZ=Your/Timezone \
   --restart unless-stopped \
   -p 8002:8002 \
   memex-redux

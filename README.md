@@ -25,8 +25,8 @@ Tools are Python plugins in `tools/`. Drop a file there, restart the server, and
 | Web framework | FastAPI |
 | ASGI server | Uvicorn |
 | MCP SDK | `mcp` (Anthropic) — `FastMCP`, Streamable HTTP |
-| Database ORM | Peewee |
-| Database | MariaDB (read-only account) |
+| Database ORM | Peewee (optional) |
+| Database | MariaDB (optional, read-only account) |
 | HTTP client | requests |
 | Frontend | Bootstrap 5 + vanilla JS |
 
@@ -43,8 +43,12 @@ memex-redux/
 │   ├── http_connector.py   # Base class for HTTP data sources
 │   └── call_log.py         # In-memory ring buffer (last 50 tool calls)
 │
-├── tools/                  # Your tool plugins — one file per data domain
-│   └── README.md
+├── tools/                  # Your tool plugins — one file per data domain (gitignored)
+│   ├── README.md
+│   └── samples/            # Reference implementations — copy and adapt
+│
+├── tests/                  # Framework tests
+│   └── samples/            # Reference tests for sample plugins
 │
 ├── models.example.py       # Template — copy to models.py and adapt
 ├── config.example.json     # Template — copy to config.json and fill in
@@ -58,7 +62,16 @@ memex-redux/
 └── requirements.txt
 ```
 
-> `config.json` and `models.py` are gitignored — they contain your credentials and schema. Use the `.example` files as starting points.
+> `config.json`, `models.py`, and `tools/*.py` are gitignored — they contain your credentials, schema, and personal tool plugins.
+
+---
+
+## Prerequisites
+
+- Python 3.11+
+- [Claude Code](https://docs.anthropic.com/en/docs/claude-code) CLI installed
+- Docker (optional, for containerised deployment)
+- A MariaDB/MySQL database (optional — only needed for database-backed tools)
 
 ---
 
@@ -78,35 +91,49 @@ pip install -r requirements.txt
 cp config.example.json config.json
 ```
 
-Edit `config.json` with your MariaDB connection details and any API endpoints you need:
+Edit `config.json`. The only required field is `server_port`:
 
 ```json
 {
-  "mariadb_host": "your-db-host",
-  "mariadb_database": "your_database",
-  "mariadb_user": "mcp_readonly",
-  "mariadb_password": "your_password",
-  "mariadb_port": 3306,
-  "api_domains": {
-    "My Service": "http://my-service:8003"
-  },
   "server_port": 8002
 }
 ```
 
-The MariaDB user should be a dedicated read-only account (`SELECT` privileges only).
+Add `api_domains` if your tools call external HTTP APIs:
 
-### 3. Define your database models
+```json
+{
+  "server_port": 8002,
+  "api_domains": {
+    "My Service": "http://my-service-host:8003"
+  }
+}
+```
+
+Add MariaDB credentials if your tools query a database. Use a dedicated read-only account (`SELECT` privileges only):
+
+```json
+{
+  "server_port": 8002,
+  "mariadb_host": "your-db-host",
+  "mariadb_database": "your_database",
+  "mariadb_user": "mcp_readonly",
+  "mariadb_password": "your_password",
+  "mariadb_port": 3306
+}
+```
+
+### 3. Define your database models (only if using MariaDB)
 
 ```bash
 cp models.example.py models.py
 ```
 
-Edit `models.py` to define Peewee models matching your database tables. See the example file for common patterns (simple tables, no primary key, composite primary key).
+Edit `models.py` to define Peewee models matching your database tables. See the example file for common patterns: simple tables, tables without a primary key, and composite primary keys.
 
 ### 4. Add tool plugins
 
-Create a file in `tools/`, import `mcp` from `core.tool_registry`, and decorate your functions:
+Create a `.py` file in `tools/`, import `mcp` from `core.tool_registry`, and decorate your functions. Copy from `tools/samples/` for a head start:
 
 ```python
 from core.tool_registry import mcp
@@ -114,12 +141,13 @@ from core.tool_registry import mcp
 @mcp.tool(description="Recent transactions and account balances")
 def get_finance(days: int = 30) -> list[dict]:
     from models import Transaction
+    from datetime import datetime, timedelta
     cutoff = datetime.now() - timedelta(days=days)
     rows = Transaction.select().where(Transaction.record_time >= cutoff)
-    return [{"date": r.record_time, "amount": r.amount} for r in rows]
+    return [{"date": str(r.record_time), "amount": r.amount} for r in rows]
 ```
 
-The `description` is what Claude reads to decide which tool to call — write it as a natural question.
+The `description` is what Claude reads to decide which tool to call — write it as a natural question or task description.
 
 ### 5. Run
 
@@ -127,7 +155,7 @@ The `description` is what Claude reads to decide which tool to call — write it
 uvicorn core.server:app --host 0.0.0.0 --port 8002 --log-config uvicorn_log_config.ini
 ```
 
-Or with Docker:
+Or with Docker (edit the timezone in `create-container.sh` first):
 
 ```bash
 ./create-container.sh
@@ -151,7 +179,7 @@ claude mcp add --transport http --scope user memex-redux http://<host>:8002/mcp
 claude mcp add --transport http --scope project memex-redux http://<host>:8002/mcp
 ```
 
-Replace `<host>` with the hostname or IP of the machine running the server.
+Replace `<host>` with the hostname or IP of the machine running the server (use `localhost` if running locally).
 
 ---
 

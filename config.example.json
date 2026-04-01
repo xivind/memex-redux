@@ -1,11 +1,6 @@
 {
-  "mariadb_host": "your-db-host",
-  "mariadb_database": "your_database",
-  "mariadb_user": "mcp_readonly",
-  "mariadb_password": "your_password",
-  "mariadb_port": 3306,
+  "server_port": 8002,
   "api_domains": {
-    "Velo Supervisor 2000": "http://your-api-host:8003"
-  },
-  "server_port": 8002
+    "My Service": "http://my-service-host:8003"
+  }
 }

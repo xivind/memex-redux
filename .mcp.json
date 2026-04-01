@@ -1,8 +1,0 @@
-{
-  "mcpServers": {
-    "memex": {
-      "type": "http",
-      "url": "http://sandbox:8002/mcp"
-    }
-  }
-}

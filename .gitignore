@@ -145,6 +145,9 @@ env.bak/
 venv.bak/
 config.json
 models.py
+tools/*.py
+!tools/__init__.py
+.mcp.json
 
 # Spyder project settings
 .spyderproject

@@ -1,6 +1,5 @@
 import json
 import pytest
-from pathlib import Path
 from unittest.mock import patch, mock_open
 
 
@@ -27,18 +26,29 @@ def test_config_loads_all_fields():
         assert db_mod.config.mariadb_port == 3306
 
 
-def test_config_missing_required_field_raises():
-    bad = json.dumps({"mariadb_host": "h"})  # missing required fields
-    with patch("builtins.open", mock_open(read_data=bad)):
+def test_config_no_db_fields_loads_with_none():
+    minimal = json.dumps({"server_port": 8002})
+    with patch("builtins.open", mock_open(read_data=minimal)):
         from importlib import reload
         import core.db_connection as db_mod
-        with pytest.raises(Exception):
-            reload(db_mod)
+        reload(db_mod)
+        assert db_mod.config.mariadb_host is None
+        assert db_mod.db is None
+
+
+def test_check_db_connection_returns_false_when_db_none():
+    import core.db_connection as db_mod
+    original_db = db_mod.db
+    db_mod.db = None
+    assert db_mod.check_db_connection() is False
+    db_mod.db = original_db
 
 
 def test_check_db_connection_returns_false_on_error():
     from unittest.mock import MagicMock
     import core.db_connection as db_mod
+    if db_mod.db is None:
+        pytest.skip("No DB configured")
     db_mod.db.connect = MagicMock(side_effect=Exception("no db"))
     assert db_mod.check_db_connection() is False
 
@@ -51,8 +61,8 @@ def test_config_loads_api_domains():
         "mariadb_password": "pass",
         "mariadb_port": 3306,
         "api_domains": {
-            "Velo Supervisor 2000": "http://vs:8003",
-            "Yr": "http://yr:8004",
+            "My Service": "http://api:8003",
+            "Another Service": "http://api2:8004",
         },
         "server_port": 8002,
     })
@@ -61,6 +71,6 @@ def test_config_loads_api_domains():
         import core.db_connection as db_mod
         reload(db_mod)
         assert db_mod.config.api_domains == {
-            "Velo Supervisor 2000": "http://vs:8003",
-            "Yr": "http://yr:8004",
+            "My Service": "http://api:8003",
+            "Another Service": "http://api2:8004",
         }

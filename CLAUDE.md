@@ -25,21 +25,22 @@ memex-redux/
 │   ├── http_connector.py   # Base class for HTTP-based data sources
 │   └── call_log.py         # In-memory ring buffer (last 50 tool calls)
 │
-├── tools/                  # User plugins — one file per data domain
+├── tools/                  # User plugins — one file per data domain (gitignored)
 │   ├── README.md
-│   ├── finance.py
-│   ├── health.py
-│   ├── climate.py
-│   └── vs2000.py
+│   └── samples/            # Reference implementations — copy and adapt
+│       ├── finance.py
+│       ├── health.py
+│       ├── climate.py
+│       └── vs2000.py
 │
-├── models.py               # All Peewee model definitions
+├── models.py               # All Peewee model definitions (gitignored)
 ├── templates/
 │   └── status.html         # Bootstrap 5 status UI
 ├── static/
 │   ├── app.js              # All frontend JavaScript
 │   └── app.css             # All frontend CSS
 │
-├── config.json             # DB credentials and API endpoint URLs
+├── config.json             # DB credentials and API endpoint URLs (gitignored)
 ├── Dockerfile
 ├── create-container.sh
 ├── requirements.txt
@@ -91,8 +92,10 @@ app.mount("/mcp", mcp.streamable_http_app())
 
 ### Auto-discovery
 
-All `tools/*.py` files are auto-discovered and imported at startup by `core/tool_registry.py`.
+All `*.py` files directly in `tools/` are auto-discovered and imported at startup by `core/tool_registry.py`.
 No registration step is needed — drop a file in `tools/` and restart.
+
+`tools/samples/` is **not** auto-discovered. It contains reference implementations to copy from, not run directly. Files in `tools/*.py` are gitignored (except `__init__.py`) — user plugins stay local.
 
 ### Decorator
 
@@ -164,19 +167,26 @@ What is logged:
 
 ```json
 {
+  "server_port": 8002,
+  "api_domains": {
+    "My API": "http://..."
+  }
+}
+```
+
+All fields except `server_port` are optional. Add MariaDB credentials only if using a database:
+
+```json
+{
   "mariadb_host": "home-assistant",
   "mariadb_database": "MASTERDB",
   "mariadb_user": "mcp_readonly",
   "mariadb_password": "...",
-  "mariadb_port": 3306,
-  "api_domains": {
-    "My API": "http://..."
-  },
-  "server_port": 8002
+  "mariadb_port": 3306
 }
 ```
 
-The MariaDB user must be a **dedicated read-only account** (`SELECT` only).
+The MariaDB user must be a **dedicated read-only account** (`SELECT` only). If no `mariadb_host` is set, `db` is `None` and `check_db_connection()` returns `False` — the server starts normally without a database.
 
 ---
 
@@ -205,7 +215,7 @@ claude mcp add --transport http --scope user memex-redux http://<host>:8002/mcp
 
 ---
 
-## Phase 1 Constraints
+## Constraints
 
 - All tools are **read-only**. No writes to the database or external APIs.
 - The MariaDB user has `SELECT` privileges only.
