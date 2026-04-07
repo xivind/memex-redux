@@ -144,6 +144,7 @@ ENV/
 env.bak/
 venv.bak/
 config.json
+gear.json
 models.py
 tools/*.py
 !tools/__init__.py
