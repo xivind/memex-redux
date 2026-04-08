@@ -1,10 +1,10 @@
-# tools/moneybags.py — Moneybags budgeting: budget plan and actual expenses
+# tools/moneybags.py — Moneybags budgeting: budget plan, actual expenses, and savings
 import peewee
 from datetime import date, timedelta
 import calendar
 
 from core.tool_registry import mcp
-from models import MoneybagBudgetEntry, MoneybagCategory, MoneybagPayee, MoneybagTransaction
+from models import MoneybagBudgetEntry, MoneybagCategory, MoneybagPayee, MoneybagSupersaver, MoneybagSupersaverCategory, MoneybagTransaction
 
 
 # ---------------------------------------------------------------------------
@@ -152,3 +152,38 @@ def get_expenses_last_3_months() -> list[dict]:
 )
 def get_expenses_ytd() -> list[dict]:
     return _expenses_for_period(*_ytd_range())
+
+
+# ---------------------------------------------------------------------------
+# Savings tools
+# ---------------------------------------------------------------------------
+
+def _savings_for_period(since: date) -> list[dict]:
+    result = []
+    for entry in (
+        MoneybagSupersaver.select(MoneybagSupersaver, MoneybagSupersaverCategory)
+        .join(MoneybagSupersaverCategory)
+        .where(MoneybagSupersaver.date >= since)
+        .order_by(MoneybagSupersaver.date.desc())
+    ):
+        result.append({
+            "date": str(entry.date),
+            "category": entry.category.name,
+            "amount": entry.amount,
+            "comment": entry.comment,
+        })
+    return result
+
+
+@mcp.tool(
+    description="Moneybags savings entries for the last 30 days, with category and amount."
+)
+def get_savings_30d() -> list[dict]:
+    return _savings_for_period(date.today() - timedelta(days=30))
+
+
+@mcp.tool(
+    description="Moneybags savings entries for the last 90 days, with category and amount."
+)
+def get_savings_90d() -> list[dict]:
+    return _savings_for_period(date.today() - timedelta(days=90))
