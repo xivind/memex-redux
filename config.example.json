@@ -2,5 +2,6 @@
   "server_port": 8002,
   "api_domains": {
     "My Service": "http://my-service-host:8003"
-  }
+  },
+  "yr_api_key": "your-yr-api-key-here"
 }
