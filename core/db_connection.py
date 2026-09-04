@@ -13,8 +13,8 @@ class Config(BaseModel):
     mariadb_password: str | None = None
     mariadb_port: int = 3306
     api_domains: dict[str, str] = {}
+    api_keys: dict[str, str] = {}
     server_port: int = 8002
-    yr_api_key: str | None = None
 
 
 def _load_config() -> Config:

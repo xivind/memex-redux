@@ -1,7 +1,12 @@
 {
   "server_port": 8002,
   "api_domains": {
-    "My Service": "http://my-service-host:8003"
+    "My Service": "http://my-service-host:8003",
+    "My Other Service": "https://my-other-service.example.com/api",
+    "My Third Service": "https://my-third-service.example.com"
   },
-  "yr_api_key": "your-yr-api-key-here"
+  "api_keys": {
+    "My Other Service": "your-api-key-here",
+    "My Third Service": "your-other-api-key-here"
+  }
 }
