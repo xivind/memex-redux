@@ -8,6 +8,7 @@ from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from mcp.server.transport_security import TransportSecuritySettings
 
 from core.call_log import call_log
 from core.db_connection import check_db_connection, config
@@ -64,4 +65,7 @@ def api_status():
 # Must be last: streamable_http_app() exposes an internal /mcp route.
 # Mounting at / (after all other routes) lets /mcp reach it while keeping
 # /, /health, and /api/status handled by FastAPI above.
-app.mount("/", mcp.streamable_http_app())
+app.mount("/", mcp.streamable_http_app(
+    stateless_http=True,
+    transport_security=TransportSecuritySettings(enable_dns_rebinding_protection=False),
+))

@@ -1,20 +1,15 @@
-# core/tool_registry.py — FastMCP instance, auto-discovery of tool plugins
+# core/tool_registry.py — MCPServer instance, auto-discovery of tool plugins
 import functools
 import importlib
 import time
 from datetime import datetime
 from pathlib import Path
 
-from mcp.server.fastmcp import FastMCP
-from mcp.server.fastmcp.server import TransportSecuritySettings
+from mcp.server.mcpserver import MCPServer
 
 from core.call_log import call_log
 
-mcp = FastMCP(
-    "memex-mcp",
-    stateless_http=True,
-    transport_security=TransportSecuritySettings(enable_dns_rebinding_protection=False),
-)
+mcp = MCPServer("memex-mcp")
 
 _registered_tools: list[dict] = []
 
