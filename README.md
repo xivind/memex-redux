@@ -175,7 +175,20 @@ claude mcp add --transport http --scope user memex-redux http://<host>:8002/mcp
 
 Replace `<host>` with the hostname or IP of the server (use `localhost` if running locally). `--scope user` makes it available across all your Claude Code projects.
 
-If you are using [vannevar](https://github.com/xivind/vannevar), the connection is configured there via `.mcp.json` — no manual `claude mcp add` needed.
+If you want the connection tied to a specific project instead, create a `.mcp.json` file in that project's root (gitignored — deployment-specific):
+
+```json
+{
+  "mcpServers": {
+    "memex": {
+      "type": "http",
+      "url": "http://<host>:8002/mcp"
+    }
+  }
+}
+```
+
+Claude Code picks this up automatically — no `claude mcp add` needed.
 
 ---
 

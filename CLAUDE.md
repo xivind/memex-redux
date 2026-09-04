@@ -211,7 +211,20 @@ HEALTHCHECK --interval=10m --timeout=10s \
 claude mcp add --transport http --scope user memex-redux http://<host>:8002/mcp
 ```
 
-If using [vannevar](https://github.com/xivind/vannevar), the connection is configured there — no manual step needed here.
+If you want the connection tied to a specific project instead, create a `.mcp.json` file in that project's root (gitignored — deployment-specific):
+
+```json
+{
+  "mcpServers": {
+    "memex": {
+      "type": "http",
+      "url": "http://<host>:8002/mcp"
+    }
+  }
+}
+```
+
+Claude Code picks this up automatically — no manual step needed here.
 
 ---
 
