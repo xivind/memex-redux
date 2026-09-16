@@ -29,6 +29,7 @@ Tools are Python plugins in `tools/`. Drop a file there, restart the server, and
 | Database | MariaDB (optional, read-only account) |
 | HTTP client | requests |
 | Frontend | Bootstrap 5 + vanilla JS |
+| Package manager | uv (not pip) |
 
 ---
 
@@ -69,6 +70,7 @@ memex-redux/
 ## Prerequisites
 
 - Python 3.11+
+- [uv](https://github.com/astral-sh/uv) installed (used for dependency management instead of pip)
 - [Claude Code](https://docs.anthropic.com/en/docs/claude-code) CLI installed
 - Docker (optional, for containerised deployment)
 - A MariaDB/MySQL database (optional — only needed for database-backed tools)
@@ -82,7 +84,7 @@ memex-redux/
 ```bash
 git clone https://github.com/xivind/memex-redux
 cd memex-redux
-pip install -r requirements.txt
+uv sync
 ```
 
 ### 2. Configure
@@ -152,7 +154,7 @@ The `description` is what Claude reads to decide which tool to call — write it
 ### 5. Run
 
 ```bash
-uvicorn core.server:app --host 0.0.0.0 --port 8002 --log-config uvicorn_log_config.ini
+uv run uvicorn core.server:app --host 0.0.0.0 --port 8002 --log-config uvicorn_log_config.ini
 ```
 
 Or with Docker (edit the timezone in `create-container.sh` first):

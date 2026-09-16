@@ -61,6 +61,7 @@ memex-redux/
 | HTTP client | requests |
 | Config validation | pydantic |
 | Frontend | Bootstrap 5 + vanilla JS |
+| Package manager | uv (not pip) |
 
 ---
 
