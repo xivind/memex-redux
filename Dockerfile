@@ -4,8 +4,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends curl && rm -rf 
 
 WORKDIR /app
 
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN uv pip install --system -r requirements.txt
 
 COPY core/ core/
 COPY tools/ tools/
