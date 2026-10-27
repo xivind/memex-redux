@@ -60,7 +60,8 @@ memex-redux/
 │   └── app.css
 ├── Dockerfile
 ├── create-container.sh
-└── requirements.txt
+├── pyproject.toml
+└── uv.lock
 ```
 
 > `config.json`, `models.py`, and `tools/*.py` are gitignored — they contain your credentials, schema, and personal tool plugins.

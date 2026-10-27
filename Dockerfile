@@ -6,8 +6,10 @@ WORKDIR /app
 
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
-COPY requirements.txt .
-RUN uv pip install --system -r requirements.txt
+# Install dependencies from the lockfile, fail the build if uv.lock is out of sync with pyproject.toml
+COPY pyproject.toml uv.lock ./
+RUN uv sync --locked --no-dev --no-cache
+ENV PATH="/app/.venv/bin:$PATH"
 
 COPY core/ core/
 COPY tools/ tools/

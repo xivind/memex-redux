@@ -43,7 +43,7 @@ memex-redux/
 ├── config.json             # DB credentials and API endpoint URLs (gitignored)
 ├── Dockerfile
 ├── create-container.sh
-├── requirements.txt
+├── pyproject.toml          # Python dependencies (uv.lock pins versions)
 └── uvicorn_log_config.ini
 ```
 
